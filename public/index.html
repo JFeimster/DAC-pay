@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DAC Pay Widget (Neo-Brutalist)</title>
+
+  <!-- Font matches your Neo-Brutalist example -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --ink:#000;
+      --paper:#f1f1f1;
+
+      --yellow:#facc15;
+      --cyan:#22d3ee;
+      --purple:#a78bfa;
+      --green:#4ade80;
+      --orange:#fb923c;
+      --white:#fff;
+
+      --border:4px solid var(--ink);
+      --shadow:8px 8px 0 0 var(--ink);
+      --shadow-hover:12px 12px 0 0 var(--ink);
+
+      --radius:0px; /* brutalism: sharp corners */
+      --maxw: 980px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:"Space Grotesk", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .wrap{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    /* --- Neo-Brutalist primitives */
+    .card{
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--white);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover{
+      transform: translate(-2px,-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .section{
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      background: var(--white);
+    }
+
+    .pill{
+      display:inline-block;
+      border: 2px solid var(--ink);
+      background: var(--white);
+      padding: 4px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      margin-right: 6px;
+      margin-top: 6px;
+    }
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-weight: 700;
+    }
+
+    .btn{
+      display:inline-block;
+      border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 0 var(--ink);
+      background: var(--white);
+      color: var(--ink);
+      padding: 12px 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      cursor:pointer;
+      text-decoration:none;
+      user-select:none;
+    }
+    .btn:active{
+      transform: translate(2px,2px);
+      box-shadow: 0 0 0 0 var(--ink);
+    }
+    .btn.black{
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    /* --- Layout */
+    .hero{
+      border-bottom: var(--border);
+      background: var(--yellow);
+      padding: 28px 18px;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size: clamp(30px, 5vw, 54px);
+      line-height: 1;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+    }
+    .hero p{
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--white);
+      border: 2px solid var(--ink);
+      padding: 10px 12px;
+      max-width: 78ch;
+    }
+    .hero .meta{
+      margin-top: 12px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content: space-between;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .panel-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px;
+      border-bottom: 3px solid var(--ink);
+      background: var(--white);
+    }
+    .panel-head h2{
+      margin:0;
+      font-size: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    .panel-head .small{
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .panel-body{
+      padding: 14px;
+    }
+
+    .block{
+      border: 3px solid var(--ink);
+      background: var(--white);
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 560px){
+      .row{ grid-template-columns: 1fr; }
+    }
+
+    label{
+      display:block;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      margin-bottom: 6px;
+    }
+
+    input, select{
+      width:100%;
+      border: 3px solid var(--ink);
+      background: var(--white);
+      padding: 10px 10px;
+      font-size: 14px;
+      font-weight: 800;
+      outline:none;
+    }
+    input:focus, select:focus{
+      box-shadow: 4px 4px 0 0 var(--ink);
+      transform: translate(-1px,-1px);
+    }
+
+    .toggle{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .02em;
+      margin-top: 10px;
+    }
+    .toggle input{
+      width: 18px;
+      height: 18px;
+      accent-color: var(--ink);
+    }
+
+    .divider{
+      height: 4px;
+      background: var(--ink);
+      margin: 14px 0;
+    }
+
+    details{
+      border: 3px solid var(--ink);
+      background: var(--white);
+      padding: 10px 10px 0;
+      margin-top: 10px;
+    }
+    summary{
+      cursor:pointer;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      list-style:none;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 10px;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .details-body{
+      border-top: 3px solid var(--ink);
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .note{
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .fineprint{
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* Results */
+    .metric{
+      border: 4px solid var(--ink);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      margin-bottom: 14px;
+      background: var(--white);
+    }
+    .metric .k{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      font-size: 12px;
+    }
+    .metric .v{
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-top: 8px;
+    }
+    .metric .sub{
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .bg-cyan{ background: var(--cyan); }
+    .bg-purple{ background: var(--purple); }
+    .bg-green{ background: var(--green); }
+    .bg-orange{ background: var(--orange); }
+
+    .btnbar{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <h1>DAC PAY ESTIMATOR</h1>
+      <p>
+        Brutally honest math, politely dressed. Estimate <span class="mono">Personal</span>,
+        <span class="mono">Override Spread</span>, and <span class="mono">5-Level</span> compensation with a configurable BR% assumption.
+      </p>
+
+      <div class="meta">
+        <div>
+          <span class="pill mono">Personal = % × BR</span>
+          <span class="pill mono">Spread = (You−Below) × BR</span>
+          <span class="pill mono">5-Level = 4% / 2% of BR</span>
+        </div>
+        <div>
+          <button class="btn black" id="recalcBtnTop">Recalculate</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <!-- INPUTS -->
+      <section class="card">
+        <div class="panel-head bg-cyan">
+          <h2>Inputs</h2>
+          <div class="small" id="modePill">Using BR%: 10%</div>
+        </div>
+        <div class="panel-body">
+
+          <div class="block bg-purple">
+            <div class="row">
+              <div>
+                <label for="brPct">Assumed Bonus Revenue (BR) % of Funding</label>
+                <input id="brPct" type="number" min="0" max="100" step="0.1" value="10" />
+              </div>
+              <div>
+                <label for="youRateEff">Your Funding Payout (shortcut)</label>
+                <select id="youRateEff">
+                  <option value="1">1% (effective)</option>
+                  <option value="4" selected>4% (effective)</option>
+                  <option value="6">6% (effective)</option>
+                  <option value="8">8% (effective)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div>
+                <label for="personalFunding">Your Personal Monthly Funding Volume ($)</label>
+                <input id="personalFunding" type="number" min="0" step="100" value="50000" />
+              </div>
+              <div>
+                <div class="toggle" title="Overrides require QCB per plan rules.">
+                  <input id="isQcb" type="checkbox" checked />
+                  <label for="isQcb" style="margin:0;">I am a QCB (overrides enabled)</label>
+                </div>
+                <div class="note" style="margin-top:10px; background:#fff; border:2px solid #000; padding:10px;">
+                  If not QCB, Override Spread and Levels 2–5 are set to $0.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="block bg-orange">
+            <div class="row">
+              <div>
+                <label for="agentCount"># of Agents (simple model)</label>
+                <input id="agentCount" type="number" min="0" step="1" value="5" />
+              </div>
+              <div>
+                <label for="agentFundingEach">Avg Monthly Funding per Agent ($)</label>
+                <input id="agentFundingEach" type="number" min="0" step="100" value="30000" />
+              </div>
+            </div>
+
+            <div class="row" style="margin-top:12px;">
+              <div>
+                <label for="agentRateEff">Agent Funding Payout (shortcut)</label>
+                <select id="agentRateEff">
+                  <option value="1">1% (effective)</option>
+                  <option value="4" selected>4% (effective)</option>
+                  <option value="6">6% (effective)</option>
+                  <option value="8">8% (effective)</option>
+                </select>
+              </div>
+              <div>
+                <label for="frontlineQcbCount">Personally Enrolled Active QCBs</label>
+                <input id="frontlineQcbCount" type="number" min="0" step="1" value="3" />
+              </div>
+            </div>
+
+            <details>
+              <summary>
+                Advanced: enter funding by level (L1–L5)
+                <span class="pill">optional</span>
+              </summary>
+              <div class="details-body">
+                <div class="note" style="margin-bottom:12px;">
+                  If any of these fields are filled, they override the simple team model for 5-Level Pay.
+                </div>
+
+                <div class="row">
+                  <div>
+                    <label for="lvl1Funding">Level 1 Funding ($)</label>
+                    <input id="lvl1Funding" type="number" min="0" step="100" value="" placeholder="leave blank to use simple model" />
+                  </div>
+                  <div>
+                    <label for="lvl2Funding">Level 2 Funding ($)</label>
+                    <input id="lvl2Funding" type="number" min="0" step="100" value="" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div>
+                    <label for="lvl3Funding">Level 3 Funding ($)</label>
+                    <input id="lvl3Funding" type="number" min="0" step="100" value="" />
+                  </div>
+                  <div>
+                    <label for="lvl4Funding">Level 4 Funding ($)</label>
+                    <input id="lvl4Funding" type="number" min="0" step="100" value="" />
+                  </div>
+                </div>
+
+                <div class="row" style="margin-top:12px;">
+                  <div>
+                    <label for="lvl5Funding">Level 5 Funding ($)</label>
+                    <input id="lvl5Funding" type="number" min="0" step="100" value="" />
+                  </div>
+                  <div></div>
+                </div>
+              </div>
+            </details>
+          </div>
+
+          <div class="btnbar">
+            <button class="btn black" id="recalcBtn">Recalculate</button>
+            <button class="btn" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="fineprint">
+            BR% varies by product; adjust BR% to match your typical outcomes.
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTS -->
+      <aside class="card">
+        <div class="panel-head bg-green">
+          <h2>Results</h2>
+          <div class="small"><span class="mono">Monthly</span></div>
+        </div>
+        <div class="panel-body">
+
+          <div class="metric">
+            <div class="k">
+              <span>Personal Commission</span>
+              <span class="pill mono" id="personalFormula"></span>
+            </div>
+            <div class="v" id="personalCommission">$0</div>
+            <div class="sub" id="personalSub"></div>
+          </div>
+
+          <div class="metric">
+            <div class="k">
+              <span>Override Spread</span>
+              <span class="pill mono" id="spreadFormula"></span>
+            </div>
+            <div class="v" id="overrideSpread">$0</div>
+            <div class="sub" id="spreadSub"></div>
+          </div>
+
+          <div class="metric">
+            <div class="k">
+              <span>5-Level Pay</span>
+              <span class="pill mono" id="fiveFormula"></span>
+            </div>
+            <div class="v" id="fiveLevelPay">$0</div>
+            <div class="sub" id="fiveSub"></div>
+          </div>
+
+          <div class="metric" style="background:#fff;">
+            <div class="k">
+              <span>Total Estimated</span>
+              <span class="pill mono">Personal + Spread + 5-Level</span>
+            </div>
+            <div class="v" id="totalPay">$0</div>
+            <div class="sub" id="totalSub"></div>
+          </div>
+
+          <div class="note" style="background:#fff; border: 3px solid #000; padding: 12px;">
+            Tip: If the numbers feel “too spicy” or “too polite,” your BR% assumption is the dial.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    // ---- Utilities
+    const $ = (id) => document.getElementById(id);
+
+    function n(v){
+      const x = Number(v);
+      return Number.isFinite(x) ? x : 0;
+    }
+    function money(v){
+      return (n(v)).toLocaleString(undefined, { style:"currency", currency:"USD", maximumFractionDigits: 0 });
+    }
+    function pct(v){
+      const num = n(v);
+      const s = num.toFixed(1);
+      return `${s.endsWith(".0") ? s.slice(0,-2) : s}%`;
+    }
+
+    // Effective funding % → commission % of BR:
+    // Commission% of BR = (Effective% / BR%) × 100
+    function effectiveToCommissionPctOfBR(effectiveFundingPct, brPct){
+      if (brPct <= 0) return 0;
+      return (effectiveFundingPct / brPct) * 100;
+    }
+
+    // 5-Level unlock rules:
+    // L1 always. L2: QCB + 3 frontline QCBs; L3: 6; L4: 10; L5: 20.
+    function unlockedLevels(isQcb, frontlineQcbCount){
+      if (!isQcb) return 1;
+      const c = frontlineQcbCount;
+      if (c >= 20) return 5;
+      if (c >= 10) return 4;
+      if (c >= 6)  return 3;
+      if (c >= 3)  return 2;
+      return 1;
+    }
+
+    function getTeamFundingByLevel(){
+      const lvl1 = $("lvl1Funding").value.trim();
+      const lvl2 = $("lvl2Funding").value.trim();
+      const lvl3 = $("lvl3Funding").value.trim();
+      const lvl4 = $("lvl4Funding").value.trim();
+      const lvl5 = $("lvl5Funding").value.trim();
+
+      const anyAdvanced = [lvl1,lvl2,lvl3,lvl4,lvl5].some(v => v !== "");
+      if (anyAdvanced){
+        return {
+          L1: n(lvl1),
+          L2: n(lvl2),
+          L3: n(lvl3),
+          L4: n(lvl4),
+          L5: n(lvl5),
+          mode: "advanced"
+        };
+      }
+
+      const agentCount = n($("agentCount").value);
+      const avgEach = n($("agentFundingEach").value);
+      const total = agentCount * avgEach;
+
+      return { L1: total, L2: 0, L3: 0, L4: 0, L5: 0, mode: "simple" };
+    }
+
+    function recalc(){
+      const brPctVal = n($("brPct").value);
+      const brRate = brPctVal / 100;
+      const isQcb = $("isQcb").checked;
+
+      // Personal
+      const personalFunding = n($("personalFunding").value);
+      const youEff = n($("youRateEff").value);
+      const youCommissionPctOfBR = effectiveToCommissionPctOfBR(youEff, brPctVal);
+      const personalBR = personalFunding * brRate;
+      const personalCommission = personalBR * (youCommissionPctOfBR / 100);
+
+      // Override Spread (simple team model)
+      const teamFundingSimpleTotal = n($("agentCount").value) * n($("agentFundingEach").value);
+      const agentEff = n($("agentRateEff").value);
+      const agentCommissionPctOfBR = effectiveToCommissionPctOfBR(agentEff, brPctVal);
+
+      const spreadPctOfBR = Math.max(0, youCommissionPctOfBR - agentCommissionPctOfBR);
+      const teamBRForSpread = teamFundingSimpleTotal * brRate;
+      const overrideSpread = isQcb ? (teamBRForSpread * (spreadPctOfBR / 100)) : 0;
+
+      // 5-Level
+      const levels = getTeamFundingByLevel();
+      const unlocked = unlockedLevels(isQcb, n($("frontlineQcbCount").value));
+
+      const L = {
+        1: levels.L1 * brRate,
+        2: levels.L2 * brRate,
+        3: levels.L3 * brRate,
+        4: levels.L4 * brRate,
+        5: levels.L5 * brRate
+      };
+
+      const lvlRates = {1:0.04, 2:0.02, 3:0.02, 4:0.02, 5:0.02};
+
+      let fiveLevelPay = 0;
+      for (let i=1; i<=unlocked; i++){
+        fiveLevelPay += L[i] * lvlRates[i];
+      }
+
+      const total = personalCommission + overrideSpread + fiveLevelPay;
+
+      // Render
+      $("modePill").textContent = `Using BR%: ${pct(brPctVal)}`;
+
+      $("personalFormula").textContent = `${pct(youCommissionPctOfBR)} of BR`;
+      $("personalCommission").textContent = money(personalCommission);
+      $("personalSub").textContent = `Personal BR = ${money(personalBR)} (${pct(brPctVal)} of ${money(personalFunding)}).`;
+
+      $("spreadFormula").textContent = isQcb ? `${pct(spreadPctOfBR)} of BR` : `QCB required → $0`;
+      $("overrideSpread").textContent = money(overrideSpread);
+      $("spreadSub").textContent = isQcb
+        ? `Team BR (simple model) = ${money(teamBRForSpread)} on ${money(teamFundingSimpleTotal)} funding. Spread = max(0, ${pct(youCommissionPctOfBR)} − ${pct(agentCommissionPctOfBR)}).`
+        : `Overrides disabled because QCB is off.`;
+
+      $("fiveFormula").textContent = `Unlocked: L1–L${unlocked}`;
+      $("fiveLevelPay").textContent = money(fiveLevelPay);
+
+      const lvlLines = [];
+      const modeLabel = (levels.mode === "advanced") ? "Advanced levels" : "Simple model (all team funding as L1)";
+      for (let i=1; i<=5; i++){
+        const funding = (i===1?levels.L1:(i===2?levels.L2:(i===3?levels.L3:(i===4?levels.L4:levels.L5))));
+        const br = L[i];
+        const rate = lvlRates[i];
+        const active = i <= unlocked;
+        lvlLines.push(`L${i}: ${money(funding)} → ${money(br)} BR × ${(rate*100).toFixed(0)}% ${active ? "✓" : "(locked)"}`);
+      }
+      $("fiveSub").textContent = `${modeLabel}. ${lvlLines.join(" · ")}`;
+
+      $("totalPay").textContent = money(total);
+      $("totalSub").textContent = `Total = Personal (${money(personalCommission)}) + Spread (${money(overrideSpread)}) + 5-Level (${money(fiveLevelPay)}).`;
+    }
+
+    function resetDefaults(){
+      $("brPct").value = 10;
+      $("youRateEff").value = 4;
+      $("personalFunding").value = 50000;
+      $("isQcb").checked = true;
+      $("agentCount").value = 5;
+      $("agentFundingEach").value = 30000;
+      $("agentRateEff").value = 4;
+      $("frontlineQcbCount").value = 3;
+
+      $("lvl1Funding").value = "";
+      $("lvl2Funding").value = "";
+      $("lvl3Funding").value = "";
+      $("lvl4Funding").value = "";
+      $("lvl5Funding").value = "";
+
+      recalc();
+    }
+
+    // Wire up
+    [
+      "brPct","youRateEff","personalFunding","isQcb",
+      "agentCount","agentFundingEach","agentRateEff","frontlineQcbCount",
+      "lvl1Funding","lvl2Funding","lvl3Funding","lvl4Funding","lvl5Funding"
+    ].forEach(id => {
+      $(id).addEventListener("input", recalc);
+      $(id).addEventListener("change", recalc);
+    });
+
+    $("recalcBtn").addEventListener("click", recalc);
+    $("recalcBtnTop").addEventListener("click", recalc);
+    $("resetBtn").addEventListener("click", resetDefaults);
+
+    // Init
+    recalc();
+  </script>
+</body>
+</html>
