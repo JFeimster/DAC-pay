@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-label="DAC Pay Widget — Neo-Brutalist compensation estimator">
+  <defs>
+    <style>
+      .ink { fill:#000; }
+      .paper { fill:#f1f1f1; }
+      .white { fill:#fff; }
+      .yellow { fill:#facc15; }
+      .cyan { fill:#22d3ee; }
+      .purple { fill:#a78bfa; }
+      .green { fill:#4ade80; }
+      .orange { fill:#fb923c; }
+
+      .stroke { stroke:#000; stroke-width:8; }
+      .stroke2 { stroke:#000; stroke-width:4; }
+      .cap { stroke-linecap:square; stroke-linejoin:miter; }
+
+      /* GitHub-safe font stack (no external font loading) */
+      .title { font: 900 64px/1 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; letter-spacing:-0.02em; text-transform:uppercase; }
+      .subtitle { font: 800 20px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; letter-spacing:0.02em; text-transform:uppercase; }
+      .mono { font: 800 16px/1.2 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; text-transform:uppercase; }
+      .small { font: 700 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1280" height="320" class="paper"></rect>
+
+  <!-- Drop shadow block (brutalist offset) -->
+  <rect x="34" y="34" width="1212" height="252" class="ink"></rect>
+
+  <!-- Main frame -->
+  <rect x="20" y="20" width="1212" height="252" class="white stroke cap"></rect>
+
+  <!-- Color slabs -->
+  <rect x="20" y="20" width="1212" height="78" class="yellow stroke cap"></rect>
+  <rect x="20" y="98" width="360" height="174" class="cyan stroke cap"></rect>
+  <rect x="380" y="98" width="332" height="174" class="purple stroke cap"></rect>
+  <rect x="712" y="98" width="260" height="174" class="green stroke cap"></rect>
+  <rect x="972" y="98" width="260" height="174" class="orange stroke cap"></rect>
+
+  <!-- Title -->
+  <text x="52" y="74" class="title ink">DAC PAY WIDGET</text>
+
+  <!-- Subtitle strip -->
+  <rect x="52" y="112" width="630" height="44" class="white stroke2 cap"></rect>
+  <text x="70" y="141" class="subtitle ink">Neo-Brutalist Compensation Estimator</text>
+
+  <!-- Pills -->
+  <g transform="translate(52,172)">
+    <rect x="0" y="0" width="250" height="38" class="white stroke2 cap"></rect>
+    <text x="14" y="25" class="mono ink">PERSONAL = % × BR</text>
+  </g>
+  <g transform="translate(318,172)">
+    <rect x="0" y="0" width="355" height="38" class="white stroke2 cap"></rect>
+    <text x="14" y="25" class="mono ink">SPREAD = (YOU−BELOW) × BR</text>
+  </g>
+  <g transform="translate(52,220)">
+    <rect x="0" y="0" width="330" height="38" class="white stroke2 cap"></rect>
+    <text x="14" y="25" class="mono ink">5-LEVEL = 4% / 2% of BR</text>
+  </g>
+
+  <!-- Right column copy -->
+  <g transform="translate(740,122)">
+    <rect x="0" y="0" width="460" height="128" class="white stroke2 cap"></rect>
+    <text x="18" y="34" class="small ink">• Static HTML/CSS/JS (embed anywhere)</text>
+    <text x="18" y="62" class="small ink">• BR% assumption dial + QCB gating</text>
+    <text x="18" y="90" class="small ink">• Vercel-ready: drop in as index.html</text>
+  </g>
+
+  <!-- Tiny footer tag -->
+  <g transform="translate(972,252)">
+    <rect x="0" y="0" width="228" height="20" class="white stroke2 cap"></rect>
+    <text x="10" y="15" class="small ink">repo banner.svg • 1280×320</text>
+  </g>
+</svg>
