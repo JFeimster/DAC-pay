@@ -26,10 +26,10 @@ You can open the widget directly in a browser:
 Paste this into an HTML embed block (replace the URL):
 
 ```html
-<div style="width:100%;max-width:980px;margin:0 auto;">
+<div style="width:100%;max-width:940px;margin:0 auto;">
   <iframe
-    src="https://YOUR-PROJECT.vercel.app/"
-    style="width:100%;height:920px;border:0;border-radius:18px;overflow:hidden;"
+    src="https://dac-pay.vercel.app/"
+    style="width:100%;height:980px;border:0;border-radius:18px;overflow:hidden;"
     title="DAC Pay Estimator"
     loading="lazy"
   ></iframe>
