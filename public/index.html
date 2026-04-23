@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DAC Pay Widget (Neo-Brutalist)</title>
 
-  <!-- Font matches your Neo-Brutalist example -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&display=swap" rel="stylesheet">
 
   <style>
@@ -315,7 +314,6 @@
 </head>
 
 <body>
-  <!-- HERO -->
   <header class="hero">
     <div class="wrap">
       <h1>DAC PAY ESTIMATOR</h1>
@@ -340,7 +338,6 @@
 
   <main class="wrap">
     <div class="grid">
-      <!-- INPUTS -->
       <section class="card">
         <div class="panel-head bg-cyan">
           <h2>Inputs</h2>
@@ -466,7 +463,6 @@
         </div>
       </section>
 
-      <!-- RESULTS -->
       <aside class="card">
         <div class="panel-head bg-green">
           <h2>Results</h2>
@@ -517,7 +513,6 @@
       </aside>
     </div>
 
-    <!-- Tiny footer -->
     <div style="margin-top:18px;font-size:12px;border:2px solid #000;background:#fff;padding:8px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;">
       Estimates only • BR% varies by product
     </div>
@@ -690,6 +685,32 @@
     $("recalcBtn").addEventListener("click", recalc);
     $("recalcBtnTop").addEventListener("click", recalc);
     $("resetBtn").addEventListener("click", resetDefaults);
+
+    // --- Copy Embed Code Logic
+    $("copyEmbedBtn").addEventListener("click", async () => {
+      const btn = $("copyEmbedBtn");
+      // Uses current location, ensuring the embed works wherever it is hosted
+      const embedCode = `<iframe src="${window.location.origin}" width="100%" height="800" frameborder="0" style="border:none;"></iframe>`;
+      
+      try {
+        await navigator.clipboard.writeText(embedCode);
+        
+        // Provide visual feedback
+        const originalText = btn.textContent;
+        btn.textContent = "Copied!";
+        btn.style.background = "var(--green)"; // Flash green for success
+        
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = ""; // Revert to default
+        }, 2000);
+        
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+        btn.textContent = "Error!";
+        setTimeout(() => { btn.textContent = "Copy Embed Code"; }, 2000);
+      }
+    });
 
     // Init
     recalc();
