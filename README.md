@@ -1,6 +1,3 @@
-Here is the revised `README.md` with the placeholder URL updated to the live deployment link:
-
-```markdown
 ![DAC Pay Widget Banner](assets/repo-banner.svg)
 
 # DAC Pay Widget (Neo-Brutalist)
@@ -56,5 +53,3 @@ Users can use the **Copy Embed Code** button on the live widget, or you can manu
     loading="lazy"
   ></iframe>
 </div>
-```
-```
